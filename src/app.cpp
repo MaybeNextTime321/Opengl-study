@@ -7,6 +7,7 @@
 #include "Render.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 enum EnumShaderType
 {
@@ -137,11 +138,13 @@ int main(void)
         0,2,3
     };
 
-    unsigned int vao;
-    GL_DEBUG_CALL(glGenVertexArrays(1, &vao));
-    GL_DEBUG_CALL(glBindVertexArray(vao));
-
+    VertexArray va;
     VertexBuffer vb(position, 8*sizeof(float));
+    VertexBufferLayout layout;
+
+    layout.PushBack<float>(2);
+    va.AddBuffer(vb,layout);
+
 
     GL_DEBUG_CALL(glEnableVertexAttribArray(0));
     GL_DEBUG_CALL(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
@@ -170,7 +173,7 @@ int main(void)
         GL_DEBUG_CALL(glClear(GL_COLOR_BUFFER_BIT));
         glUniform4f(uniformAddress, value, 0.0, 1.0, 1.0);
 
-        GL_DEBUG_CALL(glBindVertexArray(vao));
+        va.Bind();
 
         GL_DEBUG_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
         /* Swap front and back buffers */
