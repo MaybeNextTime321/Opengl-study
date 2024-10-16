@@ -6,6 +6,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
+#include "VertexBufferLayout.h"
 #include "Shader.h"
 
 int main(void)
@@ -64,10 +65,11 @@ int main(void)
     IndexBuffer ib(indicies, 6);
 
     Shader shader("Content\\Shaders\\Main.shader");
-    
+    Render render;
+
     va.Unbind();
-    GL_DEBUG_CALL(glBindBuffer(GL_ARRAY_BUFFER,0));
-    GL_DEBUG_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0));
+    ib.Unbind();
+    vb.Unbind();
 
     float delta = 0.0002f;
     float value = 0.0f;
@@ -78,9 +80,9 @@ int main(void)
         /* Render here */
         GL_DEBUG_CALL(glClear(GL_COLOR_BUFFER_BIT));
         shader.SetUniformValue4f("u_Color", value, 0.0, 1.0, 1.0);
-        va.Bind();
 
-        GL_DEBUG_CALL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        render.Draw(va,ib,shader);
+
         /* Swap front and back buffers */
         GL_DEBUG_CALL(glfwSwapBuffers(window));
 

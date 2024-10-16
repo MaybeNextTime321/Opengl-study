@@ -1,6 +1,7 @@
 #include "Render.h"
 #include <iostream>
-
+#include "VertexArray.h"
+#include "IndexBuffer.h"
 
 void ClearError()
 {
@@ -22,4 +23,11 @@ bool CheckError(const char* function, const char* file, int line)
     return true;
 }
 
+void Render::Draw(VertexArray& va, IndexBuffer& ib, Shader& shader) const
+{
+    shader.Bind();
+    va.Bind();
+    ib.Bind();
 
+    GL_DEBUG_CALL(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+}
