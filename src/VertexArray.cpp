@@ -33,3 +33,8 @@ void VertexArray::Bind() const
 {
 	GL_DEBUG_CALL(glBindVertexArray(m_RenderID));
 }
+
+void VertexArray::Unbind() const
+{
+	GL_DEBUG_CALL(glBindVertexArray(0));
+}
